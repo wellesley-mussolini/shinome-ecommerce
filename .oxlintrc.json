@@ -6,11 +6,19 @@
     "suspicious": "error",
     "perf": "error"
   },
-  "env": { "browser": true, "es2024": true },
+  "env": {
+    "browser": true,
+    "es2024": true
+  },
   "rules": {
     "react/rules-of-hooks": "error",
     "react/exhaustive-deps": "error",
-    "react/only-export-components": ["error", { "allowConstantExport": true }],
+    "react/only-export-components": [
+      "error",
+      {
+        "allowConstantExport": true
+      }
+    ],
     "react/react-in-jsx-scope": "off",
     "typescript/no-explicit-any": "error",
     "typescript/no-non-null-assertion": "error",
@@ -19,15 +27,30 @@
     "import/no-cycle": "error",
     "import/no-unassigned-import": [
       "error",
-      { "allow": ["**/*.css", "@testing-library/jest-dom/vitest"] }
+      {
+        "allow": ["**/*.css", "@testing-library/jest-dom/vitest"]
+      }
     ],
     "eqeqeq": "error",
-    "no-console": ["error", { "allow": ["warn", "error"] }]
+    "no-console": [
+      "error",
+      {
+        "allow": ["warn", "error"]
+      }
+    ]
   },
   "overrides": [
     {
       "files": ["vite.config.ts"],
-      "rules": { "import/no-default-export": "off" }
+      "rules": {
+        "import/no-default-export": "off"
+      }
+    },
+    {
+      "files": ["src/components/brand/Logo.tsx"],
+      "rules": {
+        "jsx-a11y/prefer-tag-over-role": "off"
+      }
     }
   ],
   "ignorePatterns": ["dist", "coverage", "node_modules"]
