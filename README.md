@@ -7,7 +7,7 @@ E-commerce 100% frontend em **React + TypeScript**, com tema escuro. Não há ba
 | Área          | Ferramenta                                     |
 | ------------- | ---------------------------------------------- |
 | Build / dev   | Vite 8                                         |
-| UI            | React 19 + Tailwind CSS 4 (tokens no `@theme`) |
+| UI            | React 19 + Tailwind CSS 4 + cva/tailwind-merge |
 | Linguagem     | TypeScript 7 em modo estrito máximo            |
 | Rotas         | TanStack Router (type-safe)                    |
 | Dados remotos | TanStack Query + `@supabase/supabase-js`       |
@@ -48,15 +48,20 @@ Tudo com prefixo `VITE_` vai para o bundle do navegador. Só entram aqui chaves 
 | `npm run format`    | Prettier (`format:check` só verifica)             |
 | `npm run check`     | Tudo acima, na mesma ordem do CI                  |
 
+## Design system
+
+Todas as telas seguem [`docs/design-system.md`](docs/design-system.md): só Tailwind (sem CSS), só tokens semânticos e os componentes de `src/components/ui`. As regras são verificadas por teste no CI.
+
 ## Estrutura
 
 ```
 src/
-  app/        composição: App (providers), router, layout raiz
+  app/        composição: App (providers), router, layout raiz (header com a logo)
+  components/ ui/ (primitivos do design system) e brand/ (logo)
   config/     leitura e validação do ambiente (parseEnv é puro e testável)
-  lib/        integrações: cliente Supabase, fábrica do QueryClient
+  lib/        integrações (Supabase, QueryClient) e utilitários (cn)
   pages/      uma pasta por página, com o teste ao lado do componente
-  styles/     CSS global e tokens do tema escuro
+  styles/     tailwind.css: único CSS, só import do Tailwind + tokens
   test/       setup do Vitest
 ```
 
