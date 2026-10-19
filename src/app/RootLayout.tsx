@@ -1,16 +1,21 @@
 import { Link, Outlet } from '@tanstack/react-router'
 
 import { Logo } from '@/components/brand/Logo'
+import { Container } from '@/components/ui/Container'
 
 export function RootLayout() {
   return (
-    <div className="bg-bg text-fg flex min-h-dvh flex-col">
+    <div className="flex min-h-dvh flex-col">
       <header className="border-border border-b">
-        <nav className="mx-auto flex h-16 max-w-7xl items-center px-4">
-          <Link to="/" aria-label="Shinome" className="text-brand rounded-sm hover:opacity-90">
+        <Container className="flex h-16 items-center">
+          <Link
+            to="/"
+            aria-label="Shinome"
+            className="text-brand focus-visible:outline-focus rounded-sm transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4"
+          >
             <Logo className="h-8 w-auto" />
           </Link>
-        </nav>
+        </Container>
       </header>
       <main className="flex flex-1 flex-col">
         <Outlet />
