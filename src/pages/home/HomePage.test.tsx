@@ -1,12 +1,14 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 
 import { HomePage } from './HomePage'
 
 describe('HomePage', () => {
-  it('exibe o nome da loja como título principal', () => {
+  it('usa a logo como título principal da página', () => {
     render(<HomePage />)
 
-    expect(screen.getByRole('heading', { level: 1, name: 'Shinome' })).toBeInTheDocument()
+    const heading = screen.getByRole('heading', { level: 1, name: 'Shinome' })
+
+    expect(within(heading).getByRole('img', { name: 'Shinome' })).toBeInTheDocument()
   })
 })
