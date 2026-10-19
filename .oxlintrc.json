@@ -1,0 +1,34 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["react", "typescript", "oxc", "import", "unicorn", "jsx-a11y", "vitest"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "error",
+    "perf": "error"
+  },
+  "env": { "browser": true, "es2024": true },
+  "rules": {
+    "react/rules-of-hooks": "error",
+    "react/exhaustive-deps": "error",
+    "react/only-export-components": ["error", { "allowConstantExport": true }],
+    "react/react-in-jsx-scope": "off",
+    "typescript/no-explicit-any": "error",
+    "typescript/no-non-null-assertion": "error",
+    "typescript/consistent-type-imports": "error",
+    "import/no-default-export": "error",
+    "import/no-cycle": "error",
+    "import/no-unassigned-import": [
+      "error",
+      { "allow": ["**/*.css", "@testing-library/jest-dom/vitest"] }
+    ],
+    "eqeqeq": "error",
+    "no-console": ["error", { "allow": ["warn", "error"] }]
+  },
+  "overrides": [
+    {
+      "files": ["vite.config.ts"],
+      "rules": { "import/no-default-export": "off" }
+    }
+  ],
+  "ignorePatterns": ["dist", "coverage", "node_modules"]
+}
