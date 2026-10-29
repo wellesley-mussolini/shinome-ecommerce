@@ -57,7 +57,7 @@ Uma família só (`font-sans`, a fonte do sistema). Os títulos usam a escala do
 | 3     | `text-xl font-semibold`                             | Cartões, blocos |
 | 4     | `text-lg font-medium`                               | Subtítulos      |
 
-Texto corrido: `<Text size="sm" | "md" | "lg" tone="default" | "muted" | "subtle">`.
+Texto corrido: `<Text size="sm" | "md" | "lg" tone="default" | "muted" | "subtle" | "danger">`. O tom `danger` é para mensagens de erro, ligadas ao campo por `id` + `aria-describedby`.
 
 ### Espaçamento
 
@@ -85,6 +85,11 @@ Botões e inputs compartilham a escala: `h-8` (sm), `h-10` (md, padrão) e `h-12
 | `Text`      | `src/components/ui/Text.tsx`      | Todo texto corrido                                    |
 | `Button`    | `src/components/ui/Button.tsx`    | Toda ação (`primary`, `secondary`, `ghost`, `danger`) |
 | `Logo`      | `src/components/brand/Logo.tsx`   | A marca. Cor via `text-brand`, tamanho via altura     |
+| `Input`     | `src/components/ui/Input.tsx`     | Todo campo de texto (adaptado do Aceternity)          |
+| `Label`     | `src/components/ui/Label.tsx`     | Rótulo de campo; `htmlFor` é obrigatório              |
+| `Spotlight` | `src/components/ui/Spotlight.tsx` | Luz decorativa de fundo (Aceternity), em tela cheia   |
+
+Efeitos do Aceternity que servem a uma tela só moram ao lado dela: o _Card Hover_ do catálogo está em `src/pages/catalog/ProductGrid.tsx`.
 
 Para combinar classes, use `cn()` (`src/lib/cn.ts`): ele resolve conflitos (`px-4` + `px-8` → `px-8`), então o `className` de quem chama sempre vence.
 
@@ -99,8 +104,10 @@ Para combinar classes, use `cn()` (`src/lib/cn.ts`): ele resolve conflitos (`px-
 ## Layout das telas
 
 ```
-<RootLayout>            header (logo) + main
+<StoreLayout>           telas da loja: header fixo (logo, e-mail, Sair) + main
   <Container>           largura e laterais
     <Heading level={1}> um por página
     ...seções com py-12/py-16 e gap-6/gap-8
 ```
+
+O login fica fora do `StoreLayout`: tela cheia, um card de formulário centralizado sobre o `Spotlight`.

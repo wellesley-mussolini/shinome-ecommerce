@@ -27,6 +27,16 @@ npm run dev
 
 As variáveis são validadas com Zod quando o cliente Supabase (`src/lib/supabase/client.ts`) é carregado. Se alguma faltar ou for inválida, o erro diz qual.
 
+## Telas
+
+| Rota              | Tela                                                                                       |
+| ----------------- | ------------------------------------------------------------------------------------------ |
+| `/login`          | Login de demonstração: **qualquer e-mail e senha entram** (não há autenticação real ainda) |
+| `/produtos`       | Catálogo: cards dos produtos, busca por nome e filtro por categoria                        |
+| `/produtos/:slug` | Página do produto: foto, preço, descrição e destaques                                      |
+
+Sem sessão, qualquer tela da loja leva ao login; com sessão, o login leva ao catálogo. A sessão é só o e-mail guardado no `localStorage` (`src/features/auth/session.ts`), e "Sair" no menu a encerra. Os produtos são um catálogo fixo de demonstração (`src/features/catalog/products.ts`).
+
 ## Variáveis de ambiente
 
 | Variável                        | Descrição                                                     |
@@ -56,13 +66,14 @@ Todas as telas seguem [`docs/design-system.md`](docs/design-system.md): só Tail
 
 ```
 src/
-  app/        composição: App (providers), router, layout raiz (header com a logo)
+  app/        composição: App (providers), router (rotas protegidas) e StoreLayout (header da loja)
   components/ ui/ (primitivos do design system) e brand/ (logo)
   config/     leitura e validação do ambiente (parseEnv é puro e testável)
+  features/   regras e dados do domínio: auth/ (sessão de demonstração) e catalog/ (produtos, preço)
   lib/        integrações (Supabase, QueryClient) e utilitários (cn)
   pages/      uma pasta por página, com o teste ao lado do componente
   styles/     tailwind.css: único CSS, só import do Tailwind + tokens
-  test/       setup do Vitest
+  test/       setup do Vitest e renderApp (renderiza o app com as rotas reais a partir de uma URL)
 ```
 
 Princípios:
