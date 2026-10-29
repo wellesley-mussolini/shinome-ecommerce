@@ -26,4 +26,16 @@ describe('Text', () => {
 
     expect(screen.getByText('Normal').className).not.toBe(screen.getByText('Secundário').className)
   })
+
+  it('usa o token de erro no tom danger', () => {
+    render(<Text tone="danger">Informe o e-mail</Text>)
+
+    expect(screen.getByText('Informe o e-mail')).toHaveClass('text-danger')
+  })
+
+  it('repassa atributos como id, para ligar a mensagem a um campo', () => {
+    render(<Text id="email-erro">Informe o e-mail</Text>)
+
+    expect(screen.getByText('Informe o e-mail')).toHaveAttribute('id', 'email-erro')
+  })
 })

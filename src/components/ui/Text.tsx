@@ -1,5 +1,5 @@
 import { cva, type VariantProps } from 'class-variance-authority'
-import type { ReactNode } from 'react'
+import type { HTMLAttributes, ReactNode } from 'react'
 
 import { cn } from '@/lib/cn'
 
@@ -9,6 +9,7 @@ const textVariants = cva('', {
       default: 'text-fg',
       muted: 'text-fg-muted',
       subtle: 'text-fg-subtle',
+      danger: 'text-danger',
     },
     size: {
       sm: 'text-sm',
@@ -19,12 +20,14 @@ const textVariants = cva('', {
   defaultVariants: { tone: 'default', size: 'md' },
 })
 
-type TextProps = VariantProps<typeof textVariants> & {
-  as?: 'p' | 'span' | 'div' | 'small'
-  children: ReactNode
-  className?: string
-}
+// Só os atributos que as telas usam (ligar mensagem a campo e anunciar mudanças); style fica de fora.
+type TextProps = VariantProps<typeof textVariants> &
+  Pick<HTMLAttributes<HTMLElement>, 'id' | 'role' | 'aria-live'> & {
+    as?: 'p' | 'span' | 'div' | 'small'
+    children: ReactNode
+    className?: string
+  }
 
-export function Text({ as: Tag = 'p', tone, size, children, className }: TextProps) {
-  return <Tag className={cn(textVariants({ tone, size }), className)}>{children}</Tag>
+export function Text({ as: Tag = 'p', tone, size, className, ...props }: TextProps) {
+  return <Tag className={cn(textVariants({ tone, size }), className)} {...props} />
 }
