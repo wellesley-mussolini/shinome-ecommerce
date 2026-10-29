@@ -1,15 +1,12 @@
-import { getDefaultNormalizer, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it } from 'vitest'
 
+import { startSession } from '@/features/auth/session'
 import { formatPrice } from '@/features/catalog/format-price'
 import { CATEGORY_NAMES, findProductBySlug } from '@/features/catalog/products'
-import { startSession } from '@/features/auth/session'
 import { renderApp } from '@/test/render-app'
-
-// O preço formatado usa espaço não separável (U+00A0 entre R$ e o valor); sem isso o Testing Library
-// o troca por espaço comum no texto da tela e a comparação com formatPrice falha.
-const keepWhitespace = { normalizer: getDefaultNormalizer({ collapseWhitespace: false }) }
+import { keepWhitespace } from '@/test/text-matchers'
 
 function readCatalogProduct(slug: string) {
   const product = findProductBySlug(slug)
