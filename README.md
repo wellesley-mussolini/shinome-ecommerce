@@ -90,6 +90,8 @@ Princípios:
 | `dev`  | Desenvolvimento. Recebe, por PR, todo trabalho novo já encaminhado e funcionando.          |
 | `prod` | Produção, o que o usuário final usa. Só recebe, por PR vindo de `dev`, o que foi validado. |
 
+`prod` é a branch padrão do GitHub (primária) e `dev` a secundária: PR de trabalho sempre declara `--base dev`.
+
 Todo trabalho nasce numa branch + worktree próprios a partir de `dev` e volta por PR. O passo a passo está em [`.claude/rules/fluxo-git.md`](.claude/rules/fluxo-git.md), e as regras de código em [`.claude/rules/INDEX.md`](.claude/rules/INDEX.md).
 
 O CI (`.github/workflows/ci.yml`) roda em push e PR para as duas branches.
