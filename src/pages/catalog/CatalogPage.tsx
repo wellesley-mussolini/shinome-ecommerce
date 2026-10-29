@@ -26,11 +26,11 @@ function normalizeForSearch(text: string): string {
 
 function matchesFilters(
   product: Product,
-  searchTerm: string,
+  normalizedSearchTerm: string,
   selectedCategory: CategorySlug | null,
 ): boolean {
   const isInCategory = selectedCategory === null || product.category === selectedCategory
-  return isInCategory && normalizeForSearch(product.name).includes(normalizeForSearch(searchTerm))
+  return isInCategory && normalizeForSearch(product.name).includes(normalizedSearchTerm)
 }
 
 function describeProductCount(productCount: number): string {
@@ -41,8 +41,9 @@ export function CatalogPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<CategorySlug | null>(null)
 
+  const normalizedSearchTerm = normalizeForSearch(searchTerm.trim())
   const visibleProducts = PRODUCTS.filter((product) =>
-    matchesFilters(product, searchTerm.trim(), selectedCategory),
+    matchesFilters(product, normalizedSearchTerm, selectedCategory),
   )
 
   const clearFilters = () => {
