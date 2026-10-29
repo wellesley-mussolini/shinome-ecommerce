@@ -79,9 +79,16 @@ const productRoute = createRoute({
   component: ProductPage,
 })
 
+// Endereço que não existe também passa pela guarda da loja e aparece dentro do layout dela.
+const unknownAddressRoute = createRoute({
+  getParentRoute: () => storeRoute,
+  path: '$',
+  component: NotFoundPage,
+})
+
 const routeTree = rootRoute.addChildren([
   loginRoute,
-  storeRoute.addChildren([homeRoute, catalogRoute, productRoute]),
+  storeRoute.addChildren([homeRoute, catalogRoute, productRoute, unknownAddressRoute]),
 ])
 
 export function createAppRouter(history: RouterHistory = createBrowserHistory()) {

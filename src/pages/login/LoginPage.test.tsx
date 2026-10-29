@@ -90,6 +90,13 @@ describe('login', () => {
     expect(router.state.location.pathname).toBe('/produtos')
   })
 
+  it('sem sessão, um endereço que não existe também leva ao login', async () => {
+    const router = renderApp('/endereco-que-nao-existe')
+
+    expect(await findLoginHeading()).toBeInTheDocument()
+    expect(router.state.location.pathname).toBe('/login')
+  })
+
   it('continua logado ao abrir o app de novo', async () => {
     renderApp('/login')
     await findLoginHeading()

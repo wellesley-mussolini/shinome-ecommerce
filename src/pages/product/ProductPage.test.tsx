@@ -58,23 +58,27 @@ describe('página do produto', () => {
     expect(await screen.findByRole('heading', { level: 1, name: 'Produtos' })).toBeInTheDocument()
   })
 
-  it('avisa quando o produto não existe', async () => {
+  it('avisa quando o produto não existe, dentro do layout da loja', async () => {
     renderApp('/produtos/produto-que-nao-existe')
 
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Página não encontrada' }),
     ).toBeInTheDocument()
+    expect(screen.getByRole('banner')).toBeInTheDocument()
+    expect(screen.getByRole('main')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Voltar para produtos' })).toHaveAttribute(
       'href',
       '/produtos',
     )
   })
 
-  it('avisa quando o endereço não existe', async () => {
+  it('avisa quando o endereço não existe, dentro do layout da loja', async () => {
     renderApp('/endereco-que-nao-existe')
 
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Página não encontrada' }),
     ).toBeInTheDocument()
+    expect(screen.getByRole('banner')).toBeInTheDocument()
+    expect(screen.getByRole('main')).toBeInTheDocument()
   })
 })
