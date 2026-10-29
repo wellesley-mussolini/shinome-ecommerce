@@ -9,8 +9,20 @@ Toda tela segue este documento. O objetivo é um só: **nenhuma decisão visual 
 3. **Sem valores arbitrários** (`w-[37px]`, `bg-[#111]`, `mt-[13px]`). Se faltar um valor, crie um token.
 4. **Só cores semânticas.** A paleta padrão do Tailwind está desligada (`--color-*: initial`), então `bg-zinc-900` ou `text-white` nem geram classe.
 5. **Use os componentes de `src/components/ui`** antes de escrever classes soltas. Botão é sempre `<Button>`, título é sempre `<Heading>`, texto corrido é sempre `<Text>`, largura de página é sempre `<Container>`.
+6. **Só dark mode.** Os tokens já são a paleta escura; não existe tema claro nem prefixo `dark:`.
+7. **Uma tela, um sistema.** Toda tela usa os mesmos tokens, componentes, espaçamentos e padrões de layout. Nada de uma tela num estilo e outra noutro.
 
-As regras 1 a 4 são verificadas por `src/design-system.guard.test.ts`: quebrar uma delas quebra o CI.
+As regras 1 a 4 e 6 são verificadas por `src/design-system.guard.test.ts`: quebrar uma delas quebra o CI.
+
+## Aceternity UI
+
+Para efeitos e componentes visuais (spotlight, cards com hover animado, fundos, navegação), a primeira fonte é o [Aceternity UI](https://ui.aceternity.com/components): muita coisa pronta e bem desenhada. O código de lá, porém, vem com cores fixas (`bg-zinc-800`, `#3b82f6`), valores arbitrários (`p-[2px]`), `style={}`, `let`, `any` e prefixo `dark:`, tudo proibido aqui. Por isso **o componente nunca é colado como veio: ele é adaptado**.
+
+1. Pegue o código no registry (`https://ui.aceternity.com/registry/<componente>.json`) e use como referência visual e de animação.
+2. Reescreva no padrão do repo: cores por token, escala padrão do Tailwind, animação pelas props do [`motion`](https://motion.dev) (`initial`, `animate`, `whileHover`, `layoutId`) em vez de `style` (a dependência entra junto com o primeiro componente que a usar), só `const`, tipos explícitos, sem `dark:`.
+3. Corrija a acessibilidade: elemento clicável é `<button>` ou `<a>`, decorativo leva `aria-hidden`, foco visível com o token `focus`.
+4. Se o componente é genérico, ele entra em `src/components/ui` com teste e uma linha na tabela de componentes abaixo; se serve a uma tela só, mora ao lado dela.
+5. Efeito que só funciona com `style` dinâmico (por exemplo, o brilho que segue o mouse do `Input` deles) fica de fora até existir uma forma de fazê-lo com tokens.
 
 ## Tokens
 
