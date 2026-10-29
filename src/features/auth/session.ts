@@ -11,5 +11,7 @@ export function endSession(): void {
 }
 
 export function getSessionEmail(): string | null {
-  return localStorage.getItem(SESSION_STORAGE_KEY)
+  const storedEmail = localStorage.getItem(SESSION_STORAGE_KEY)
+  // O valor vem do navegador e pode ter sido editado à mão: e-mail em branco não é sessão.
+  return storedEmail?.trim() ? storedEmail : null
 }

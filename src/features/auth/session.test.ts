@@ -13,12 +13,6 @@ describe('sessão de demonstração', () => {
     expect(getSessionEmail()).toBe('cliente@shinome.com')
   })
 
-  it('continua logado depois de recarregar a página (o e-mail fica no localStorage)', () => {
-    startSession('cliente@shinome.com')
-
-    expect(localStorage.getItem('shinome:session-email')).toBe('cliente@shinome.com')
-  })
-
   it('esquece a sessão ao sair', () => {
     startSession('cliente@shinome.com')
     endSession()

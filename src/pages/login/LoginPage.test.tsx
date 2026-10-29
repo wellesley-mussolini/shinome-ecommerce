@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react'
+import { cleanup, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 
@@ -7,6 +7,12 @@ import { renderApp } from '@/test/render-app'
 
 async function findLoginHeading() {
   return screen.findByRole('heading', { level: 1, name: 'Entrar' })
+}
+
+async function signInThroughForm(email: string) {
+  await userEvent.type(screen.getByLabelText('E-mail'), email)
+  await userEvent.type(screen.getByLabelText('Senha'), '123')
+  await userEvent.click(screen.getByRole('button', { name: 'Entrar' }))
 }
 
 describe('login', () => {
@@ -28,9 +34,7 @@ describe('login', () => {
     const router = renderApp('/login')
     await findLoginHeading()
 
-    await userEvent.type(screen.getByLabelText('E-mail'), 'qualquer@coisa')
-    await userEvent.type(screen.getByLabelText('Senha'), '123')
-    await userEvent.click(screen.getByRole('button', { name: 'Entrar' }))
+    await signInThroughForm('qualquer@coisa')
 
     expect(await screen.findByRole('heading', { level: 1, name: 'Produtos' })).toBeInTheDocument()
     expect(router.state.location.pathname).toBe('/produtos')
@@ -62,6 +66,26 @@ describe('login', () => {
     expect(screen.getByLabelText('E-mail')).toBeValid()
     expect(screen.queryByText('Informe seu e-mail.')).not.toBeInTheDocument()
     expect(screen.getByLabelText('Senha')).toBeInvalid()
+  })
+
+  it('continua logado ao abrir o app de novo', async () => {
+    renderApp('/login')
+    await findLoginHeading()
+    await signInThroughForm('cliente@shinome.com')
+    await screen.findByRole('heading', { level: 1, name: 'Produtos' })
+
+    cleanup()
+    renderApp('/produtos')
+
+    expect(await screen.findByRole('heading', { level: 1, name: 'Produtos' })).toBeInTheDocument()
+  })
+
+  it('não considera logado quem só tem um e-mail em branco guardado', async () => {
+    localStorage.setItem('shinome:session-email', '   ')
+    const router = renderApp('/produtos')
+
+    expect(await findLoginHeading()).toBeInTheDocument()
+    expect(router.state.location.pathname).toBe('/login')
   })
 
   it('com sessão, abrir o login leva direto ao catálogo', async () => {
