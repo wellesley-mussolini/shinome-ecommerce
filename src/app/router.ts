@@ -3,41 +3,44 @@ import {
   createRootRoute,
   createRoute,
   createRouter,
+  lazyRouteComponent,
   notFound,
   redirect,
   type RouterHistory,
 } from '@tanstack/react-router'
-import { z } from 'zod'
 
 import { getSessionEmail } from '@/features/auth/session'
 import { findProductBySlug } from '@/features/catalog/products'
-import { CatalogPage } from '@/pages/catalog/CatalogPage'
-import { LoginPage } from '@/pages/login/LoginPage'
 import { NotFoundPage } from '@/pages/not-found/NotFoundPage'
-import { ProductPage } from '@/pages/product/ProductPage'
 
 import { StoreLayout } from './StoreLayout'
 
+// Cada página vira um chunk próprio, carregado quando a rota abre: o motion (animações do
+// Aceternity) e o código das telas não pesam no carregamento inicial.
 const rootRoute = createRootRoute()
 
-const loginSearchSchema = z.object({
-  // Para onde voltar depois de entrar. Só caminho interno ('/produtos/x'); '//site.com' e URLs
-  // absolutas são ignorados, para o login não virar um redirecionamento aberto.
-  voltar: z
-    .string()
-    .regex(/^\/(?!\/)/)
-    .optional()
-    .catch(undefined),
-})
+type LoginSearch = {
+  voltar?: string | undefined
+}
+
+// Para onde voltar depois de entrar. Só caminho interno ('/produtos/x'); '//site.com' e URLs
+// absolutas são descartados, para o login não virar um redirecionamento aberto. A chave volta
+// sempre, com undefined quando recusada: o router mescla este retorno com a busca crua da URL,
+// e omitir a chave manteria o valor recusado.
+function readLoginSearch(search: Record<string, unknown>): LoginSearch {
+  const { voltar } = search
+  const isInternalPath = typeof voltar === 'string' && /^\/(?!\/)/.test(voltar)
+  return { voltar: isInternalPath ? voltar : undefined }
+}
 
 const loginRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/login',
-  validateSearch: loginSearchSchema,
+  validateSearch: readLoginSearch,
   beforeLoad: () => {
     if (getSessionEmail()) throw redirect({ to: '/produtos', replace: true })
   },
-  component: LoginPage,
+  component: lazyRouteComponent(() => import('@/pages/login/LoginPage'), 'LoginPage'),
 })
 
 // Layout da loja: só entra quem tem sessão; o e-mail segue no contexto para o cabeçalho.
@@ -65,7 +68,7 @@ const homeRoute = createRoute({
 const catalogRoute = createRoute({
   getParentRoute: () => storeRoute,
   path: '/produtos',
-  component: CatalogPage,
+  component: lazyRouteComponent(() => import('@/pages/catalog/CatalogPage'), 'CatalogPage'),
 })
 
 const productRoute = createRoute({
@@ -76,7 +79,7 @@ const productRoute = createRoute({
     if (!product) throw notFound()
     return product
   },
-  component: ProductPage,
+  component: lazyRouteComponent(() => import('@/pages/product/ProductPage'), 'ProductPage'),
 })
 
 // Endereço que não existe também passa pela guarda da loja e aparece dentro do layout dela.

@@ -17,21 +17,21 @@ async function signInThroughForm(email: string) {
 
 describe('login', () => {
   it('sem sessão, o catálogo leva ao login', async () => {
-    const router = renderApp('/produtos')
+    const router = await renderApp('/produtos')
 
     expect(await findLoginHeading()).toBeInTheDocument()
     expect(router.state.location.pathname).toBe('/login')
   })
 
   it('sem sessão, a página de um produto também leva ao login', async () => {
-    const router = renderApp('/produtos/sapato-vermelho')
+    const router = await renderApp('/produtos/sapato-vermelho')
 
     expect(await findLoginHeading()).toBeInTheDocument()
     expect(router.state.location.pathname).toBe('/login')
   })
 
   it('entra com qualquer e-mail e senha e vai para o catálogo', async () => {
-    const router = renderApp('/login')
+    const router = await renderApp('/login')
     await findLoginHeading()
 
     await signInThroughForm('qualquer@coisa')
@@ -42,7 +42,7 @@ describe('login', () => {
   })
 
   it('pede e-mail e senha quando faltam, sem sair do login', async () => {
-    const router = renderApp('/login')
+    const router = await renderApp('/login')
     await findLoginHeading()
 
     await userEvent.type(screen.getByLabelText('E-mail'), '   ')
@@ -62,7 +62,7 @@ describe('login', () => {
   })
 
   it('tira o aviso do campo assim que ele é preenchido', async () => {
-    renderApp('/login')
+    await renderApp('/login')
     await findLoginHeading()
 
     await userEvent.click(screen.getByRole('button', { name: 'Entrar' }))
@@ -74,7 +74,7 @@ describe('login', () => {
   })
 
   it('depois de entrar, volta para a página que a pessoa tinha aberto', async () => {
-    const router = renderApp('/produtos/sapato-vermelho')
+    const router = await renderApp('/produtos/sapato-vermelho')
     await findLoginHeading()
 
     await signInThroughForm('cliente@shinome.com')
@@ -86,7 +86,7 @@ describe('login', () => {
   })
 
   it('não segue um endereço de volta que aponte para fora do app', async () => {
-    const router = renderApp('/login?voltar=//site-malicioso.com')
+    const router = await renderApp('/login?voltar=//site-malicioso.com')
     await findLoginHeading()
 
     await signInThroughForm('cliente@shinome.com')
@@ -96,27 +96,27 @@ describe('login', () => {
   })
 
   it('sem sessão, um endereço que não existe também leva ao login', async () => {
-    const router = renderApp('/endereco-que-nao-existe')
+    const router = await renderApp('/endereco-que-nao-existe')
 
     expect(await findLoginHeading()).toBeInTheDocument()
     expect(router.state.location.pathname).toBe('/login')
   })
 
   it('continua logado ao abrir o app de novo', async () => {
-    renderApp('/login')
+    await renderApp('/login')
     await findLoginHeading()
     await signInThroughForm('cliente@shinome.com')
     await screen.findByRole('heading', { level: 1, name: 'Produtos' })
 
     cleanup()
-    renderApp('/produtos')
+    await renderApp('/produtos')
 
     expect(await screen.findByRole('heading', { level: 1, name: 'Produtos' })).toBeInTheDocument()
   })
 
   it('não considera logado quem só tem um e-mail em branco guardado', async () => {
     localStorage.setItem('shinome:session-email', '   ')
-    const router = renderApp('/produtos')
+    const router = await renderApp('/produtos')
 
     expect(await findLoginHeading()).toBeInTheDocument()
     expect(router.state.location.pathname).toBe('/login')
@@ -124,7 +124,7 @@ describe('login', () => {
 
   it('com sessão, abrir o login leva direto ao catálogo', async () => {
     startSession('cliente@shinome.com')
-    const router = renderApp('/login')
+    const router = await renderApp('/login')
 
     expect(await screen.findByRole('heading', { level: 1, name: 'Produtos' })).toBeInTheDocument()
     expect(router.state.location.pathname).toBe('/produtos')
@@ -132,7 +132,7 @@ describe('login', () => {
 
   it('sair encerra a sessão e volta ao login', async () => {
     startSession('cliente@shinome.com')
-    renderApp('/produtos')
+    await renderApp('/produtos')
 
     await userEvent.click(await screen.findByRole('button', { name: 'Sair' }))
 

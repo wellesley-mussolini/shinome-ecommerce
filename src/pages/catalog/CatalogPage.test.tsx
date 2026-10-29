@@ -9,7 +9,7 @@ import { renderApp } from '@/test/render-app'
 import { keepWhitespace } from '@/test/text-matchers'
 
 async function openCatalog() {
-  renderApp('/produtos')
+  await renderApp('/produtos')
   await screen.findByRole('heading', { level: 1, name: 'Produtos' })
 }
 
@@ -23,7 +23,7 @@ describe('catálogo', () => {
   })
 
   it('a página inicial leva ao catálogo', async () => {
-    const router = renderApp('/')
+    const router = await renderApp('/')
 
     expect(await screen.findByRole('heading', { level: 1, name: 'Produtos' })).toBeInTheDocument()
     expect(router.state.location.pathname).toBe('/produtos')

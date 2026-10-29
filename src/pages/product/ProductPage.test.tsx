@@ -20,7 +20,7 @@ describe('página do produto', () => {
   })
 
   it('abre ao clicar no card do catálogo', async () => {
-    const router = renderApp('/produtos')
+    const router = await renderApp('/produtos')
 
     await userEvent.click(await screen.findByRole('link', { name: 'Sapato Vermelho' }))
 
@@ -32,7 +32,7 @@ describe('página do produto', () => {
 
   it('mostra foto, categoria, preço, descrição e destaques', async () => {
     const product = readCatalogProduct('relogio-pulseira-de-couro')
-    renderApp(`/produtos/${product.slug}`)
+    await renderApp(`/produtos/${product.slug}`)
 
     await screen.findByRole('heading', { level: 1, name: product.name })
 
@@ -48,7 +48,7 @@ describe('página do produto', () => {
   })
 
   it('volta para o catálogo', async () => {
-    renderApp('/produtos/sapato-vermelho')
+    await renderApp('/produtos/sapato-vermelho')
 
     await userEvent.click(await screen.findByRole('link', { name: 'Voltar para produtos' }))
 
@@ -56,7 +56,7 @@ describe('página do produto', () => {
   })
 
   it('avisa quando o produto não existe, dentro do layout da loja', async () => {
-    renderApp('/produtos/produto-que-nao-existe')
+    await renderApp('/produtos/produto-que-nao-existe')
 
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Página não encontrada' }),
@@ -70,7 +70,7 @@ describe('página do produto', () => {
   })
 
   it('avisa quando o endereço não existe, dentro do layout da loja', async () => {
-    renderApp('/endereco-que-nao-existe')
+    await renderApp('/endereco-que-nao-existe')
 
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Página não encontrada' }),

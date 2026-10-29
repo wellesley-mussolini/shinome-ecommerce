@@ -10,7 +10,7 @@ describe('StoreLayout', () => {
   })
 
   it('mostra a logo no menu como link para o catálogo', async () => {
-    renderApp('/produtos')
+    await renderApp('/produtos')
 
     const header = await screen.findByRole('banner')
     const catalogLink = within(header).getByRole('link', { name: 'Shinome' })
@@ -20,7 +20,7 @@ describe('StoreLayout', () => {
   })
 
   it('mostra no menu o e-mail de quem entrou', async () => {
-    renderApp('/produtos')
+    await renderApp('/produtos')
 
     const header = await screen.findByRole('banner')
 
