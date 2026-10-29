@@ -7,6 +7,7 @@ import {
   redirect,
   type RouterHistory,
 } from '@tanstack/react-router'
+import { z } from 'zod'
 
 import { getSessionEmail } from '@/features/auth/session'
 import { findProductBySlug } from '@/features/catalog/products'
@@ -19,9 +20,20 @@ import { StoreLayout } from './StoreLayout'
 
 const rootRoute = createRootRoute()
 
+const loginSearchSchema = z.object({
+  // Para onde voltar depois de entrar. Só caminho interno ('/produtos/x'); '//site.com' e URLs
+  // absolutas são ignorados, para o login não virar um redirecionamento aberto.
+  voltar: z
+    .string()
+    .regex(/^\/(?!\/)/)
+    .optional()
+    .catch(undefined),
+})
+
 const loginRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/login',
+  validateSearch: loginSearchSchema,
   beforeLoad: () => {
     if (getSessionEmail()) throw redirect({ to: '/produtos', replace: true })
   },
@@ -32,9 +44,11 @@ const loginRoute = createRoute({
 const storeRoute = createRoute({
   getParentRoute: () => rootRoute,
   id: 'store',
-  beforeLoad: () => {
+  beforeLoad: ({ location }) => {
     const sessionEmail = getSessionEmail()
-    if (!sessionEmail) throw redirect({ to: '/login', replace: true })
+    if (!sessionEmail) {
+      throw redirect({ to: '/login', search: { voltar: location.href }, replace: true })
+    }
     return { sessionEmail }
   },
   component: StoreLayout,

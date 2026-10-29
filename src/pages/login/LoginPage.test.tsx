@@ -68,6 +68,28 @@ describe('login', () => {
     expect(screen.getByLabelText('Senha')).toBeInvalid()
   })
 
+  it('depois de entrar, volta para a página que a pessoa tinha aberto', async () => {
+    const router = renderApp('/produtos/sapato-vermelho')
+    await findLoginHeading()
+
+    await signInThroughForm('cliente@shinome.com')
+
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Sapato Vermelho' }),
+    ).toBeInTheDocument()
+    expect(router.state.location.pathname).toBe('/produtos/sapato-vermelho')
+  })
+
+  it('não segue um endereço de volta que aponte para fora do app', async () => {
+    const router = renderApp('/login?voltar=//site-malicioso.com')
+    await findLoginHeading()
+
+    await signInThroughForm('cliente@shinome.com')
+
+    expect(await screen.findByRole('heading', { level: 1, name: 'Produtos' })).toBeInTheDocument()
+    expect(router.state.location.pathname).toBe('/produtos')
+  })
+
   it('continua logado ao abrir o app de novo', async () => {
     renderApp('/login')
     await findLoginHeading()

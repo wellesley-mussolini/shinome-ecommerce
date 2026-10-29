@@ -1,5 +1,5 @@
 import { IconArrowRight } from '@tabler/icons-react'
-import { useNavigate } from '@tanstack/react-router'
+import { getRouteApi, useNavigate } from '@tanstack/react-router'
 import { useState, type FormEvent } from 'react'
 
 import { Logo } from '@/components/brand/Logo'
@@ -11,7 +11,10 @@ import { Spotlight } from '@/components/ui/Spotlight'
 import { Text } from '@/components/ui/Text'
 import { startSession } from '@/features/auth/session'
 
+const loginRoute = getRouteApi('/login')
+
 export function LoginPage() {
+  const { voltar: returnPath } = loginRoute.useSearch()
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -28,7 +31,7 @@ export function LoginPage() {
     if (isEmailMissing || isPasswordMissing) return
 
     startSession(email.trim())
-    void navigate({ to: '/produtos' })
+    void navigate({ href: returnPath ?? '/produtos' })
   }
 
   return (
