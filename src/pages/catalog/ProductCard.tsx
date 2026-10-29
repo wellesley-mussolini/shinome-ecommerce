@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router'
 import { useId } from 'react'
 
 import { Heading } from '@/components/ui/Heading'
@@ -7,15 +8,16 @@ import { CATEGORY_NAMES, type Product } from '@/features/catalog/products'
 
 type ProductCardProps = {
   product: Product
+  onHighlightChange: (isHighlighted: boolean) => void
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, onHighlightChange }: ProductCardProps) {
   const nameId = useId()
 
   return (
     <article
       aria-labelledby={nameId}
-      className="group border-border bg-surface hover:border-border-strong relative flex h-full flex-col gap-4 rounded-lg border p-4 transition-colors"
+      className="group border-border bg-surface hover:border-border-strong focus-within:outline-focus relative flex h-full flex-col gap-4 rounded-lg border p-4 transition-colors focus-within:outline-2 focus-within:outline-offset-2"
     >
       <div className="bg-surface-raised aspect-square overflow-hidden rounded-md">
         <img
@@ -30,7 +32,18 @@ export function ProductCard({ product }: ProductCardProps) {
           {CATEGORY_NAMES[product.category]}
         </Text>
         <Heading level={3} id={nameId}>
-          {product.name}
+          {/* O ::after estende o link sobre o card inteiro, sem aninhar o conteúdo dentro do link. */}
+          <Link
+            to="/produtos/$slug"
+            params={{ slug: product.slug }}
+            onMouseEnter={() => onHighlightChange(true)}
+            onMouseLeave={() => onHighlightChange(false)}
+            onFocus={() => onHighlightChange(true)}
+            onBlur={() => onHighlightChange(false)}
+            className="outline-none after:absolute after:inset-0 after:rounded-lg"
+          >
+            {product.name}
+          </Link>
         </Heading>
         <Text as="span" className="mt-auto pt-2 font-medium">
           {formatPrice(product.priceInCents)}
