@@ -1,12 +1,12 @@
 import { IconCheck } from '@tabler/icons-react'
 import { getRouteApi } from '@tanstack/react-router'
 
+import { BackToCatalogLink } from '@/components/navigation/BackToCatalogLink'
 import { Container } from '@/components/ui/Container'
 import { Heading } from '@/components/ui/Heading'
 import { Text } from '@/components/ui/Text'
 import { formatPrice } from '@/features/catalog/format-price'
 import { CATEGORY_NAMES } from '@/features/catalog/products'
-import { BackToCatalogLink } from '@/pages/catalog/BackToCatalogLink'
 
 const productRoute = getRouteApi('/store/produtos/$slug')
 

@@ -1,10 +1,11 @@
 import { IconLogout } from '@tabler/icons-react'
-import { getRouteApi, Link, Outlet, useNavigate } from '@tanstack/react-router'
+import { getRouteApi, Outlet, useNavigate } from '@tanstack/react-router'
 
 import { Logo } from '@/components/brand/Logo'
 import { Button } from '@/components/ui/Button'
 import { Container } from '@/components/ui/Container'
 import { Text } from '@/components/ui/Text'
+import { TextLink } from '@/components/ui/TextLink'
 import { endSession } from '@/features/auth/session'
 
 const storeRoute = getRouteApi('/store')
@@ -22,13 +23,13 @@ export function StoreLayout() {
     <div className="flex min-h-dvh flex-col">
       <header className="border-border bg-bg/80 sticky top-0 z-10 border-b backdrop-blur-sm">
         <Container className="flex h-16 items-center justify-between gap-4">
-          <Link
+          <TextLink
             to="/produtos"
             aria-label="Shinome"
-            className="text-brand focus-visible:outline-focus rounded-sm transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4"
+            className="text-brand transition-opacity hover:opacity-80"
           >
             <Logo className="h-8 w-auto" />
-          </Link>
+          </TextLink>
           <div className="flex items-center gap-4">
             <Text as="span" size="sm" tone="muted" className="hidden sm:block">
               {sessionEmail}

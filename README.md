@@ -67,7 +67,7 @@ Todas as telas seguem [`docs/design-system.md`](docs/design-system.md): só Tail
 ```
 src/
   app/        composição: App (providers), router (rotas protegidas) e StoreLayout (header da loja)
-  components/ ui/ (primitivos do design system) e brand/ (logo)
+  components/ ui/ (primitivos do design system), brand/ (logo) e navigation/ (links compartilhados entre telas)
   config/     leitura e validação do ambiente (parseEnv é puro e testável)
   features/   regras e dados do domínio: auth/ (sessão de demonstração) e catalog/ (produtos, preço)
   lib/        integrações (Supabase, QueryClient) e utilitários (cn)

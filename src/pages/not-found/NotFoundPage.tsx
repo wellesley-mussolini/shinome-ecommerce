@@ -1,7 +1,7 @@
+import { BackToCatalogLink } from '@/components/navigation/BackToCatalogLink'
 import { Container } from '@/components/ui/Container'
 import { Heading } from '@/components/ui/Heading'
 import { Text } from '@/components/ui/Text'
-import { BackToCatalogLink } from '@/pages/catalog/BackToCatalogLink'
 
 export function NotFoundPage() {
   return (

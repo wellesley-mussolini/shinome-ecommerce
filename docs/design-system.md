@@ -78,16 +78,17 @@ Botões e inputs compartilham a escala: `h-8` (sm), `h-10` (md, padrão) e `h-12
 
 ## Componentes
 
-| Componente  | Onde                              | Quando usar                                           |
-| ----------- | --------------------------------- | ----------------------------------------------------- |
-| `Container` | `src/components/ui/Container.tsx` | Toda largura de conteúdo de página                    |
-| `Heading`   | `src/components/ui/Heading.tsx`   | Todo título (`level` define tag e escala)             |
-| `Text`      | `src/components/ui/Text.tsx`      | Todo texto corrido                                    |
-| `Button`    | `src/components/ui/Button.tsx`    | Toda ação (`primary`, `secondary`, `ghost`, `danger`) |
-| `Logo`      | `src/components/brand/Logo.tsx`   | A marca. Cor via `text-brand`, tamanho via altura     |
-| `Input`     | `src/components/ui/Input.tsx`     | Todo campo de texto (adaptado do Aceternity)          |
-| `Label`     | `src/components/ui/Label.tsx`     | Rótulo de campo; `htmlFor` é obrigatório              |
-| `Spotlight` | `src/components/ui/Spotlight.tsx` | Luz decorativa de fundo (Aceternity), em tela cheia   |
+| Componente  | Onde                              | Quando usar                                                                     |
+| ----------- | --------------------------------- | ------------------------------------------------------------------------------- |
+| `Container` | `src/components/ui/Container.tsx` | Toda largura de conteúdo de página                                              |
+| `Heading`   | `src/components/ui/Heading.tsx`   | Todo título (`level` define tag e escala)                                       |
+| `Text`      | `src/components/ui/Text.tsx`      | Todo texto corrido                                                              |
+| `Button`    | `src/components/ui/Button.tsx`    | Toda ação (`primary`, `secondary`, `ghost`, `danger`)                           |
+| `Logo`      | `src/components/brand/Logo.tsx`   | A marca. Cor via `text-brand`, tamanho via altura                               |
+| `TextLink`  | `src/components/ui/TextLink.tsx`  | Todo link de navegação que não é botão (rotas tipadas, anel de foco do sistema) |
+| `Input`     | `src/components/ui/Input.tsx`     | Todo campo de texto (adaptado do Aceternity)                                    |
+| `Label`     | `src/components/ui/Label.tsx`     | Rótulo de campo; `htmlFor` é obrigatório                                        |
+| `Spotlight` | `src/components/ui/Spotlight.tsx` | Luz decorativa de fundo (Aceternity), em tela cheia                             |
 
 Efeitos do Aceternity que servem a uma tela só moram ao lado dela: o _Card Hover_ do catálogo está em `src/pages/catalog/ProductGrid.tsx`.
 
