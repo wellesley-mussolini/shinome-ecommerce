@@ -53,6 +53,13 @@ describe('design system', () => {
     expect(content).not.toMatch(/\bstyle=\{/)
   })
 
+  it.each(componentFiles)(
+    '$path não usa o prefixo dark: (o app só tem tema escuro)',
+    ({ content }) => {
+      expect(content).not.toMatch(/(?:^|[\s"'`])dark:/m)
+    },
+  )
+
   it.each(componentFiles)('$path não usa valores arbitrários do Tailwind', ({ content }) => {
     expect(content).not.toMatch(/(?:^|[\s"'`])[a-z][\w:-]*-\[[^\]]+\]/m)
   })
