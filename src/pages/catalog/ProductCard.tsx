@@ -1,3 +1,5 @@
+import { useId } from 'react'
+
 import { Heading } from '@/components/ui/Heading'
 import { Text } from '@/components/ui/Text'
 import { formatPrice } from '@/features/catalog/format-price'
@@ -8,8 +10,13 @@ type ProductCardProps = {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const nameId = useId()
+
   return (
-    <article className="group border-border bg-surface hover:border-border-strong relative flex h-full flex-col gap-4 rounded-lg border p-4 transition-colors">
+    <article
+      aria-labelledby={nameId}
+      className="group border-border bg-surface hover:border-border-strong relative flex h-full flex-col gap-4 rounded-lg border p-4 transition-colors"
+    >
       <div className="bg-surface-raised aspect-square overflow-hidden rounded-md">
         <img
           src={product.imagePath}
@@ -22,7 +29,9 @@ export function ProductCard({ product }: ProductCardProps) {
         <Text as="span" size="sm" tone="subtle">
           {CATEGORY_NAMES[product.category]}
         </Text>
-        <Heading level={3}>{product.name}</Heading>
+        <Heading level={3} id={nameId}>
+          {product.name}
+        </Heading>
         <Text as="span" className="mt-auto pt-2 font-medium">
           {formatPrice(product.priceInCents)}
         </Text>

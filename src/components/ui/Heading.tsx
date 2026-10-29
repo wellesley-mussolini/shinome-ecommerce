@@ -14,11 +14,16 @@ const headingStyles: Record<HeadingLevel, string> = {
 type HeadingProps = {
   level: HeadingLevel
   children: ReactNode
+  id?: string
   className?: string
 }
 
-export function Heading({ level, children, className }: HeadingProps) {
+export function Heading({ level, children, id, className }: HeadingProps) {
   const Tag = `h${level}` as const
 
-  return <Tag className={cn('text-fg', headingStyles[level], className)}>{children}</Tag>
+  return (
+    <Tag id={id} className={cn('text-fg', headingStyles[level], className)}>
+      {children}
+    </Tag>
+  )
 }

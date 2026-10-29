@@ -22,4 +22,14 @@ describe('Heading', () => {
       screen.getByRole('heading', { name: 'Dois' }).className,
     )
   })
+
+  it('aceita id, para rotular uma região com o título', () => {
+    render(
+      <Heading level={3} id="titulo-do-card">
+        Camisa
+      </Heading>,
+    )
+
+    expect(screen.getByRole('heading', { name: 'Camisa' })).toHaveAttribute('id', 'titulo-do-card')
+  })
 })
