@@ -11,6 +11,8 @@ O repositório tem **só duas branches permanentes**:
 | `dev`  | Desenvolvimento. Recebe tudo que é novo, **já encaminhado e funcionando**, mesmo que ainda falte validar.     |
 | `prod` | Produção: é o que o usuário final usa. Só recebe o que está funcionando, testado, validado e é produto final. |
 
+`prod` é a **branch padrão (primária) do GitHub**; `dev` é a secundária. Consequência prática: PR aberto sem base explícita aponta para `prod`, então **todo PR de trabalho declara a base `dev`** (`gh pr create --base dev`).
+
 O trabalho em andamento (pela metade, incompleto) vive **só** na branch de trabalho, nunca em `dev`.
 
 ## Fluxo de um trabalho, do início ao fim
@@ -24,7 +26,7 @@ O trabalho em andamento (pela metade, incompleto) vive **só** na branch de trab
    Nome da branch: `<tipo>/<assunto-em-kebab-case>` em pt-BR, com o tipo do conventional commits (`feat/login-e-catalogo`, `fix/preco-com-centavos`, `chore/regras-do-repositorio`).
 2. **Commits por etapa concluída** (veja abaixo), cada um passando em `npm run check`.
 3. **Antes do PR**: rodar o code review e o simplify sobre o diff inteiro da branch, confrontar cada linha `+` com as regras dos temas tocados e corrigir os achados com TDD, cada correção no seu commit.
-4. **PR para `dev`**, com a descrição completa (o que mudou, por quê, como era antes, como é agora, como foi testado, riscos) e comentários inline nas linhas com decisão não óbvia.
+4. **PR para `dev`** (`gh pr create --base dev`, nunca a base padrão, que é `prod`), com a descrição completa (o que mudou, por quê, como era antes, como é agora, como foi testado, riscos) e comentários inline nas linhas com decisão não óbvia.
 5. **Merge só com CI verde**, sem warning novo (build, lint, testes, actions) e sem achado aberto. Estratégia: **merge commit** (`gh pr merge --merge --match-head-commit <sha>`), que preserva os commits da branch e agrupa o trabalho no histórico.
 6. **Depois do merge**: apagar o worktree e a branch (local e remota).
    ```bash
@@ -51,6 +53,8 @@ O trabalho em andamento (pela metade, incompleto) vive **só** na branch de trab
 | Proibido                                              | Correto                                                        |
 | ----------------------------------------------------- | -------------------------------------------------------------- |
 | Commitar direto em `dev` ou `prod`                    | Branch + worktree + PR                                         |
+| PR de trabalho sem base explícita (cai em `prod`)     | `gh pr create --base dev`                                      |
+| Trocar a branch padrão do GitHub para `dev`           | `prod` é a padrão (primária); `dev` é a secundária             |
 | Merge local (`git merge`) entre branches permanentes  | PR, sempre                                                     |
 | Branch permanente nova (`staging`, `develop`, `main`) | Só `dev` e `prod`                                              |
 | Trabalho pela metade em `dev`                         | Fica na branch de trabalho até estar encaminhado e funcionando |
