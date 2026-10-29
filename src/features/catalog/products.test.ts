@@ -3,7 +3,7 @@ import { join } from 'node:path'
 
 import { describe, expect, it } from 'vitest'
 
-import { CATEGORIES, PRODUCTS, findProductBySlug } from './products'
+import { CATEGORY_SLUGS, PRODUCTS, findProductBySlug } from './products'
 
 describe('catálogo de produtos', () => {
   it('cada produto tem um slug único, para a URL da página do produto', () => {
@@ -17,8 +17,8 @@ describe('catálogo de produtos', () => {
   })
 
   it('toda categoria tem pelo menos um produto', () => {
-    const categoriesWithoutProducts = CATEGORIES.filter(
-      (category) => !PRODUCTS.some((product) => product.category === category.slug),
+    const categoriesWithoutProducts = CATEGORY_SLUGS.filter(
+      (categorySlug) => !PRODUCTS.some((product) => product.category === categorySlug),
     )
 
     expect(categoriesWithoutProducts).toEqual([])

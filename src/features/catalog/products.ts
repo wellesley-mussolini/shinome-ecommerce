@@ -1,13 +1,15 @@
 // Catálogo fixo de demonstração. Quando os produtos vierem do Supabase, este módulo vira a consulta.
-export const CATEGORIES = [
-  { slug: 'camisas', name: 'Camisas' },
-  { slug: 'relogios', name: 'Relógios' },
-  { slug: 'oculos', name: 'Óculos' },
-  { slug: 'bolsas', name: 'Bolsas' },
-  { slug: 'calcados', name: 'Calçados' },
-] as const
+export const CATEGORY_SLUGS = ['camisas', 'relogios', 'oculos', 'bolsas', 'calcados'] as const
 
-export type CategorySlug = (typeof CATEGORIES)[number]['slug']
+export type CategorySlug = (typeof CATEGORY_SLUGS)[number]
+
+export const CATEGORY_NAMES: Record<CategorySlug, string> = {
+  camisas: 'Camisas',
+  relogios: 'Relógios',
+  oculos: 'Óculos',
+  bolsas: 'Bolsas',
+  calcados: 'Calçados',
+}
 
 export type Product = {
   slug: string
