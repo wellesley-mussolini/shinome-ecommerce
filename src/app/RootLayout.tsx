@@ -9,7 +9,7 @@ export function RootLayout() {
       <header className="border-border border-b">
         <Container className="flex h-16 items-center">
           <Link
-            to="/"
+            to="/produtos"
             aria-label="Shinome"
             className="text-brand focus-visible:outline-focus rounded-sm transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4"
           >

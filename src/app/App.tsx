@@ -4,7 +4,9 @@ import { useState } from 'react'
 
 import { createQueryClient } from '@/lib/query/query-client'
 
-import { router } from './router'
+import { createAppRouter } from './router'
+
+const router = createAppRouter()
 
 export function App() {
   const [queryClient] = useState(createQueryClient)

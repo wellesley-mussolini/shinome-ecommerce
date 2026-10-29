@@ -1,6 +1,13 @@
-import { createRootRoute, createRoute, createRouter } from '@tanstack/react-router'
+import {
+  createBrowserHistory,
+  createRootRoute,
+  createRoute,
+  createRouter,
+  redirect,
+  type RouterHistory,
+} from '@tanstack/react-router'
 
-import { HomePage } from '@/pages/home/HomePage'
+import { CatalogPage } from '@/pages/catalog/CatalogPage'
 
 import { RootLayout } from './RootLayout'
 
@@ -9,15 +16,25 @@ const rootRoute = createRootRoute({ component: RootLayout })
 const homeRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
-  component: HomePage,
+  beforeLoad: () => {
+    throw redirect({ to: '/produtos', replace: true })
+  },
 })
 
-const routeTree = rootRoute.addChildren([homeRoute])
+const catalogRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/produtos',
+  component: CatalogPage,
+})
 
-export const router = createRouter({ routeTree, defaultPreload: 'intent' })
+const routeTree = rootRoute.addChildren([homeRoute, catalogRoute])
+
+export function createAppRouter(history: RouterHistory = createBrowserHistory()) {
+  return createRouter({ routeTree, history, defaultPreload: 'intent', scrollRestoration: true })
+}
 
 declare module '@tanstack/react-router' {
   interface Register {
-    router: typeof router
+    router: ReturnType<typeof createAppRouter>
   }
 }
