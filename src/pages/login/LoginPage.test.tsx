@@ -1,0 +1,84 @@
+import { screen, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { describe, expect, it } from 'vitest'
+
+import { getSessionEmail, startSession } from '@/features/auth/session'
+import { renderApp } from '@/test/render-app'
+
+async function findLoginHeading() {
+  return screen.findByRole('heading', { level: 1, name: 'Entrar' })
+}
+
+describe('login', () => {
+  it('sem sessão, o catálogo leva ao login', async () => {
+    const router = renderApp('/produtos')
+
+    expect(await findLoginHeading()).toBeInTheDocument()
+    expect(router.state.location.pathname).toBe('/login')
+  })
+
+  it('sem sessão, a página de um produto também leva ao login', async () => {
+    const router = renderApp('/produtos/sapato-vermelho')
+
+    expect(await findLoginHeading()).toBeInTheDocument()
+    expect(router.state.location.pathname).toBe('/login')
+  })
+
+  it('entra com qualquer e-mail e senha e vai para o catálogo', async () => {
+    const router = renderApp('/login')
+    await findLoginHeading()
+
+    await userEvent.type(screen.getByLabelText('E-mail'), 'qualquer@coisa')
+    await userEvent.type(screen.getByLabelText('Senha'), '123')
+    await userEvent.click(screen.getByRole('button', { name: 'Entrar' }))
+
+    expect(await screen.findByRole('heading', { level: 1, name: 'Produtos' })).toBeInTheDocument()
+    expect(router.state.location.pathname).toBe('/produtos')
+    expect(within(screen.getByRole('banner')).getByText('qualquer@coisa')).toBeInTheDocument()
+  })
+
+  it('pede e-mail e senha quando faltam, sem sair do login', async () => {
+    const router = renderApp('/login')
+    await findLoginHeading()
+
+    await userEvent.type(screen.getByLabelText('E-mail'), '   ')
+    await userEvent.click(screen.getByRole('button', { name: 'Entrar' }))
+
+    expect(screen.getByLabelText('E-mail')).toBeInvalid()
+    expect(screen.getByLabelText('E-mail')).toHaveAccessibleDescription('Informe seu e-mail.')
+    expect(screen.getByLabelText('Senha')).toBeInvalid()
+    expect(screen.getByLabelText('Senha')).toHaveAccessibleDescription('Informe sua senha.')
+    expect(router.state.location.pathname).toBe('/login')
+    expect(getSessionEmail()).toBeNull()
+  })
+
+  it('tira o aviso do campo assim que ele é preenchido', async () => {
+    renderApp('/login')
+    await findLoginHeading()
+
+    await userEvent.click(screen.getByRole('button', { name: 'Entrar' }))
+    await userEvent.type(screen.getByLabelText('E-mail'), 'cliente@shinome.com')
+
+    expect(screen.getByLabelText('E-mail')).toBeValid()
+    expect(screen.queryByText('Informe seu e-mail.')).not.toBeInTheDocument()
+    expect(screen.getByLabelText('Senha')).toBeInvalid()
+  })
+
+  it('com sessão, abrir o login leva direto ao catálogo', async () => {
+    startSession('cliente@shinome.com')
+    const router = renderApp('/login')
+
+    expect(await screen.findByRole('heading', { level: 1, name: 'Produtos' })).toBeInTheDocument()
+    expect(router.state.location.pathname).toBe('/produtos')
+  })
+
+  it('sair encerra a sessão e volta ao login', async () => {
+    startSession('cliente@shinome.com')
+    renderApp('/produtos')
+
+    await userEvent.click(await screen.findByRole('button', { name: 'Sair' }))
+
+    expect(await findLoginHeading()).toBeInTheDocument()
+    expect(getSessionEmail()).toBeNull()
+  })
+})

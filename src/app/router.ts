@@ -8,17 +8,40 @@ import {
   type RouterHistory,
 } from '@tanstack/react-router'
 
+import { getSessionEmail } from '@/features/auth/session'
 import { findProductBySlug } from '@/features/catalog/products'
 import { CatalogPage } from '@/pages/catalog/CatalogPage'
+import { LoginPage } from '@/pages/login/LoginPage'
 import { NotFoundPage } from '@/pages/not-found/NotFoundPage'
 import { ProductPage } from '@/pages/product/ProductPage'
 
-import { RootLayout } from './RootLayout'
+import { StoreLayout } from './StoreLayout'
 
-const rootRoute = createRootRoute({ component: RootLayout })
+const rootRoute = createRootRoute()
+
+const loginRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/login',
+  beforeLoad: () => {
+    if (getSessionEmail()) throw redirect({ to: '/produtos', replace: true })
+  },
+  component: LoginPage,
+})
+
+// Layout da loja: só entra quem tem sessão; o e-mail segue no contexto para o cabeçalho.
+const storeRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  id: 'store',
+  beforeLoad: () => {
+    const sessionEmail = getSessionEmail()
+    if (!sessionEmail) throw redirect({ to: '/login', replace: true })
+    return { sessionEmail }
+  },
+  component: StoreLayout,
+})
 
 const homeRoute = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => storeRoute,
   path: '/',
   beforeLoad: () => {
     throw redirect({ to: '/produtos', replace: true })
@@ -26,13 +49,13 @@ const homeRoute = createRoute({
 })
 
 const catalogRoute = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => storeRoute,
   path: '/produtos',
   component: CatalogPage,
 })
 
 const productRoute = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => storeRoute,
   path: '/produtos/$slug',
   loader: ({ params }) => {
     const product = findProductBySlug(params.slug)
@@ -42,7 +65,10 @@ const productRoute = createRoute({
   component: ProductPage,
 })
 
-const routeTree = rootRoute.addChildren([homeRoute, catalogRoute, productRoute])
+const routeTree = rootRoute.addChildren([
+  loginRoute,
+  storeRoute.addChildren([homeRoute, catalogRoute, productRoute]),
+])
 
 export function createAppRouter(history: RouterHistory = createBrowserHistory()) {
   return createRouter({

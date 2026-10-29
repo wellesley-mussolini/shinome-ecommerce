@@ -8,7 +8,7 @@ import { formatPrice } from '@/features/catalog/format-price'
 import { CATEGORY_NAMES } from '@/features/catalog/products'
 import { BackToCatalogLink } from '@/pages/catalog/BackToCatalogLink'
 
-const productRoute = getRouteApi('/produtos/$slug')
+const productRoute = getRouteApi('/store/produtos/$slug')
 
 export function ProductPage() {
   const product = productRoute.useLoaderData()

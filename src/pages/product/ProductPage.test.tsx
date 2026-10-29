@@ -1,9 +1,10 @@
 import { getDefaultNormalizer, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 
 import { formatPrice } from '@/features/catalog/format-price'
 import { CATEGORY_NAMES, findProductBySlug } from '@/features/catalog/products'
+import { startSession } from '@/features/auth/session'
 import { renderApp } from '@/test/render-app'
 
 // O preço formatado usa espaço não separável (U+00A0 entre R$ e o valor); sem isso o Testing Library
@@ -17,6 +18,10 @@ function readCatalogProduct(slug: string) {
 }
 
 describe('página do produto', () => {
+  beforeEach(() => {
+    startSession('cliente@shinome.com')
+  })
+
   it('abre ao clicar no card do catálogo', async () => {
     const router = renderApp('/produtos')
 
