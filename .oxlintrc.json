@@ -1,6 +1,7 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "plugins": ["react", "typescript", "oxc", "import", "unicorn", "jsx-a11y", "vitest"],
+  "jsPlugins": ["./lint/code-rules-plugin.mjs"],
   "categories": {
     "correctness": "error",
     "suspicious": "error",
@@ -23,6 +24,14 @@
     "typescript/no-explicit-any": "error",
     "typescript/no-non-null-assertion": "error",
     "typescript/consistent-type-imports": "error",
+    "typescript/ban-ts-comment": [
+      "error",
+      {
+        "ts-expect-error": true,
+        "ts-ignore": true,
+        "ts-nocheck": true
+      }
+    ],
     "import/no-default-export": "error",
     "import/no-cycle": "error",
     "import/no-unassigned-import": [
@@ -32,16 +41,18 @@
       }
     ],
     "eqeqeq": "error",
+    "no-empty": "error",
     "no-console": [
       "error",
       {
         "allow": ["warn", "error"]
       }
-    ]
+    ],
+    "shinome/only-const": "error"
   },
   "overrides": [
     {
-      "files": ["vite.config.ts"],
+      "files": ["vite.config.ts", "lint/*.mjs"],
       "rules": {
         "import/no-default-export": "off"
       }
