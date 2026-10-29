@@ -27,5 +27,5 @@
 ## Sinal de busca
 
 - `git grep -n "getByTestId" -- src` deve voltar vazio.
-- `git grep -nE "querySelector|toHaveClass|firstElementChild|getElementsByTagName" -- "src/**/*.test.tsx"` é julgamento: só vale nos testes dos primitivos (`src/components`), verificando o contrato de `className` ou um SVG decorativo; em teste de tela é violação.
+- `git grep -nE "querySelector|toHaveClass|firstElementChild|getElementsByTagName" -- "src/**/*.test.tsx"` é julgamento: só vale em teste de componente visual (primitivo de `src/components` ou efeito decorativo ao lado da tela, como o `Spotlight` do login), verificando o contrato de `className` ou o SVG; em teste de tela é violação.
 - `git grep -nE "vi\.mock\('@/" -- src` é julgamento: só vale para fronteira que sai do processo.

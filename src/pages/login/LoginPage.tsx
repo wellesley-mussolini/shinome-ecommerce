@@ -7,9 +7,10 @@ import { Button } from '@/components/ui/Button'
 import { Heading } from '@/components/ui/Heading'
 import { Input } from '@/components/ui/Input'
 import { Label } from '@/components/ui/Label'
-import { Spotlight } from '@/components/ui/Spotlight'
 import { Text } from '@/components/ui/Text'
 import { startSession } from '@/features/auth/session'
+
+import { Spotlight } from './Spotlight'
 
 const loginRoute = getRouteApi('/login')
 
