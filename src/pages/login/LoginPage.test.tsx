@@ -52,6 +52,11 @@ describe('login', () => {
     expect(screen.getByLabelText('E-mail')).toHaveAccessibleDescription('Informe seu e-mail.')
     expect(screen.getByLabelText('Senha')).toBeInvalid()
     expect(screen.getByLabelText('Senha')).toHaveAccessibleDescription('Informe sua senha.')
+    expect(screen.getAllByRole('alert').map((alert) => alert.textContent)).toEqual([
+      'Informe seu e-mail.',
+      'Informe sua senha.',
+    ])
+    expect(screen.getByLabelText('E-mail')).toHaveFocus()
     expect(router.state.location.pathname).toBe('/login')
     expect(getSessionEmail()).toBeNull()
   })

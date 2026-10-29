@@ -1,6 +1,6 @@
 import { IconArrowRight } from '@tabler/icons-react'
 import { getRouteApi, useNavigate } from '@tanstack/react-router'
-import { useState, type FormEvent } from 'react'
+import { useRef, useState, type FormEvent } from 'react'
 
 import { Logo } from '@/components/brand/Logo'
 import { Button } from '@/components/ui/Button'
@@ -19,6 +19,8 @@ export function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [hasTriedToSubmit, setHasTriedToSubmit] = useState(false)
+  const emailInputRef = useRef<HTMLInputElement>(null)
+  const passwordInputRef = useRef<HTMLInputElement>(null)
 
   const isEmailMissing = email.trim() === ''
   const isPasswordMissing = password === ''
@@ -28,7 +30,12 @@ export function LoginPage() {
   const submitLogin = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setHasTriedToSubmit(true)
-    if (isEmailMissing || isPasswordMissing) return
+    if (isEmailMissing || isPasswordMissing) {
+      // Leva o foco ao primeiro campo com problema, para teclado e leitor de tela.
+      const firstInvalidInput = isEmailMissing ? emailInputRef : passwordInputRef
+      firstInvalidInput.current?.focus()
+      return
+    }
 
     startSession(email.trim())
     void navigate({ href: returnPath ?? '/produtos' })
@@ -50,6 +57,7 @@ export function LoginPage() {
           <div className="flex flex-col gap-2">
             <Label htmlFor="login-email">E-mail</Label>
             <Input
+              ref={emailInputRef}
               id="login-email"
               type="email"
               autoComplete="email"
@@ -60,7 +68,7 @@ export function LoginPage() {
               aria-describedby={showEmailError ? 'login-email-error' : undefined}
             />
             {showEmailError && (
-              <Text id="login-email-error" size="sm" tone="danger">
+              <Text id="login-email-error" role="alert" size="sm" tone="danger">
                 Informe seu e-mail.
               </Text>
             )}
@@ -68,6 +76,7 @@ export function LoginPage() {
           <div className="flex flex-col gap-2">
             <Label htmlFor="login-password">Senha</Label>
             <Input
+              ref={passwordInputRef}
               id="login-password"
               type="password"
               autoComplete="current-password"
@@ -78,7 +87,7 @@ export function LoginPage() {
               aria-describedby={showPasswordError ? 'login-password-error' : undefined}
             />
             {showPasswordError && (
-              <Text id="login-password-error" size="sm" tone="danger">
+              <Text id="login-password-error" role="alert" size="sm" tone="danger">
                 Informe sua senha.
               </Text>
             )}
