@@ -69,14 +69,16 @@ Princípios:
 
 - **Responsabilidade única**: cada módulo faz uma coisa. A config valida, o `lib` integra, as páginas renderizam.
 - **Inversão de dependência**: a lógica recebe as dependências por parâmetro (ex.: `parseEnv(source)`), e só a camada de composição liga ao ambiente real.
-- **Sem default export** (exceto `vite.config.ts`). Imports absolutos via `@/`.
+- **Sem default export** (exceto `vite.config.ts` e os plugins de lint em `lint/`, que o oxlint exige assim). Imports absolutos via `@/`.
 - **TDD**: todo comportamento novo começa com um teste falhando.
 
-## Branches
+## Branches e fluxo de trabalho
 
-| Branch | Ambiente                                        |
-| ------ | ----------------------------------------------- |
-| `dev`  | Desenvolvimento. Os PRs de feature entram aqui. |
-| `prod` | Produção. Só recebe merge vindo de `dev`.       |
+| Branch | Ambiente                                                                                   |
+| ------ | ------------------------------------------------------------------------------------------ |
+| `dev`  | Desenvolvimento. Recebe, por PR, todo trabalho novo já encaminhado e funcionando.          |
+| `prod` | Produção, o que o usuário final usa. Só recebe, por PR vindo de `dev`, o que foi validado. |
+
+Todo trabalho nasce numa branch + worktree próprios a partir de `dev` e volta por PR. O passo a passo está em [`.claude/rules/fluxo-git.md`](.claude/rules/fluxo-git.md), e as regras de código em [`.claude/rules/INDEX.md`](.claude/rules/INDEX.md).
 
 O CI (`.github/workflows/ci.yml`) roda em push e PR para as duas branches.
